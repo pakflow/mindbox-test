@@ -1,7 +1,5 @@
 import { TodoList } from "./widgets/todo-list";
 
-import "./App.css";
-
 function App() {
   return (
     <div>

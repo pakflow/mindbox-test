@@ -10,22 +10,25 @@ import s from "./TodoList.module.scss";
 
 export function TodoList() {
   const [filter, setFilter] = useState<Filter>("all");
-  const { addTask, toggleStatus, clearCompleted, filteredTasks, remaining } =
-    useTask();
+
+  const {
+    addTask,
+    toggleStatus,
+    clearCompleted,
+    getFilteredTasks,
+    activeCount,
+  } = useTask();
+
   return (
-    <div className={s.todo}>
+    <div className={s.container}>
       <h2 className={s.title}>todos</h2>
       <div className={s.list}>
         <TaskInput onAdd={addTask} />
-        <TaskList
-          tasks={filteredTasks(filter)}
-          filter={filter}
-          onToggle={toggleStatus}
-        />
+        <TaskList tasks={getFilteredTasks(filter)} onToggle={toggleStatus} />
         <TaskFilters
           currentFilter={filter}
           onChangeFilter={setFilter}
-          remaining={remaining()}
+          activeCount={activeCount}
           onClearCompleted={clearCompleted}
         />
       </div>

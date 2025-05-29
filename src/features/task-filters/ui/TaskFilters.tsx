@@ -6,21 +6,21 @@ import s from "./TaskFilters.module.scss";
 type TaskFiltersProps = {
   currentFilter: Filter;
   onChangeFilter: (filter: Filter) => void;
-  remaining: number;
+  activeCount: number;
   onClearCompleted: () => void;
 };
 
-const filters: Filter[] = ["all", "active", "completed"];
+const filters: Filter[] = ["all", "active", "completed"] as const;
 
 export function TaskFilters({
   currentFilter,
   onChangeFilter,
-  remaining,
+  activeCount,
   onClearCompleted,
 }: TaskFiltersProps) {
   return (
     <div className={s.task_filters}>
-      <span>{remaining} left</span>
+      <span>{activeCount} left</span>
       <div className={s.buttons}>
         {filters.map((f) => (
           <button

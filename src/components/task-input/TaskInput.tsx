@@ -22,14 +22,16 @@ export function TaskInput({ onAdd }: TaskInputProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        className={s.input}
-        type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="What needs to be done?"
-        autoFocus
-      />
+      <div className={s.container}>
+        <input
+          className={s.input}
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="What needs to be done?"
+          autoFocus
+        />
+      </div>
     </form>
   );
 }

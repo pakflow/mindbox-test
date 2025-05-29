@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Filter, Task } from "../types";
 
 let idCounter = 0;
@@ -33,7 +33,7 @@ export function useTask() {
     setTasks((prev) => prev.filter((task) => task.status !== "completed"));
   };
 
-  const filteredTasks = (filter: Filter) => {
+  const getFilteredTasks = (filter: Filter) => {
     if (filter === "all") {
       return tasks;
     }
@@ -41,15 +41,17 @@ export function useTask() {
     return tasks.filter((task) => task.status === filter);
   };
 
-  const remaining = () =>
-    tasks.filter((task) => task.status === "active").length;
+  const activeCount = useMemo(
+    () => tasks.filter((task) => task.status === "active").length,
+    [tasks]
+  );
 
   return {
     tasks,
     addTask,
     toggleStatus,
     clearCompleted,
-    filteredTasks,
-    remaining,
+    getFilteredTasks,
+    activeCount,
   };
 }
