@@ -1,0 +1,42 @@
+.task_item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 1.2rem;
+  background-color: white;
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 1rem;
+    cursor: pointer;
+
+    &:checked {
+      border-color: #5dc2af;
+
+      &::after {
+        content: "✔";
+        color: #5dc2af;
+        font-size: 16px;
+        position: absolute;
+        left: 4px;
+      }
+    }
+  }
+
+  .text {
+    color: #333;
+  }
+
+  .completed {
+    text-decoration: line-through;
+    color: #bfbfbf;
+    opacity: 0.6;
+  }
+}
