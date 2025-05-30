@@ -1,54 +1,106 @@
-# React + TypeScript + Vite
+# 📝 ToDo App — тестовое задание для Mindbox
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Простое ToDo-приложение, реализованное на **React**, **TypeScript** и **React Hooks**. Задача — продемонстрировать уверенную работу с современным стеком, архитектурой и тестированием ключевой логики.
 
-Currently, two official plugins are available:
+## 🚀 Запуск проекта
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm install
+npm run start
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Приложение будет доступно по адресу [http://localhost:5173](http://localhost:5173)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ✅ Возможности
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+* Добавление новых задач
+* Переключение задач между статусами `active` / `completed`
+* Очистка выполненных задач
+* Фильтрация задач по статусу
+* Подсчёт активных задач
+
+## 🧠 Архитектура и ход мыслей
+
+### 💡 Общий подход
+
+Используется **минималистичная структура FSD (Feature-Sliced Design)**. Это даёт хорошую читаемость, масштабируемость и логичное разделение ответственности.
+
+### 📁 Структура проекта
+
 ```
+src/
+├── entities/
+│   └── task/
+│       ├── model/
+│       │   ├── useTask.ts         # Хук с бизнес-логикой
+│       │   └── useTask.test.ts    # Юнит-тесты логики
+│       ├── types/  
+│           ├── index.ts            # Типы Task и Filter
+│       └── ui/
+│           ├── TaskItem/          # Отображение задачи
+│           └── TaskList/          # Список задач
+│
+├── features/
+│   └── task-filter/               # Компонент фильтрации задач
+|
+├── widgets/
+│   └── todo-list/               # Главный виджет ToDo-приложения
+│
+├── components/
+│   ├── task-input/             # Поле ввода новой задачи
+```
+
+## 🧪 Тестирование
+
+Ключевая бизнес-логика вынесена в хук `useTask` и покрыта тестами:
+
+* ✅ Добавление задач
+* 🔁 Переключение статуса
+* 🧹 Очистка выполненных
+* 🔍 Фильтрация
+* 📊 Подсчёт активных задач
+
+```bash
+npm run test
+```
+
+Тесты используют `renderHook` и `act` из `@testing-library/react`
+
+## 📝 Ход решений
+
+* Вся логика работы с задачами инкапсулирована в хук `useTask`, что делает код проще для тестирования и повторного использования.
+* Для фильтрации и отображения используется универсальный тип `Filter = 'all' | 'active' | 'completed'`.
+* Для состояния задач выбран enum-like подход (`status: 'active' | 'completed'`), а не boolean, так как он расширяемый.
+* Тесты фокусируются на key logic (CRUD + фильтрация), а не на UI.
+
+## 📌 Возможные улучшения
+
+* [ ] Хранение задач в `localStorage`
+* [ ] Drag-and-drop задач
+* [ ] Поддержка дедлайнов и описаний
+* [ ] Тесты UI-компонентов (TaskItem, TaskFilters)
+* [ ] Адаптивная вёрстка
+
+
+⚡ Масштабируемость и производительность
+
+В текущей реализации все задачи хранятся в состоянии React и полностью отрисовываются. Это работает при небольшом объёме, но при загрузке, например, 1 миллиона задач, возникают проблемы:
+
+🧠 Всё хранится в памяти (useState) → нагрузка на память и медленный ререндер
+
+🔁 Отсутствие виртуализации → перерисовываются все 1M DOM-элементов
+
+⚠️ Зависимость от массива — любое изменение пересоздаёт весь список
+
+🔧 Возможные решения:
+
+ Хранение задач в IndexedDB или частями через API
+
+ Чанковая загрузка задач (по страницам или scroll)
+---
+
+**Автор:** \[Максим]
+
+---
+
+> Тестовое выполнено с упором на чистоту архитектуры, удобочитаемость кода и тестируемость логики.
